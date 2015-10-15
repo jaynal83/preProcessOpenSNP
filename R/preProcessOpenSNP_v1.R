@@ -13,7 +13,16 @@ preProcessOpenSNP <- function(userInfo,db)
  {
   print(paste("Iteration Index ", paste(i), paste(" out of "), paste(nrow(userInfo)),sep=""))
   snpURL <- userInfo$genotypes.download_url[i]
-  rawSNP <- read.table(snpURL,stringsAsFactors=FALSE,comment.char="#",header=F,colClasses=c("character","character","numeric","character"))
+  ftype <- userInfo$genotypes.filetype[i]
+  if(ftype!="23andme" & ftype!="ftdna-illumina")
+   next
+  if(ftype=="23andme") 
+   rawSNP <- read.table(snpURL,stringsAsFactors=FALSE,comment.char="#",header=F,colClasses=c("character","character","numeric","character"))
+  if(ftype=="ftdna-illumina")
+  {
+   rawSNP <- read.csv(snpURL,stringsAsFactors=FALSE,comment.char="#",colClasses=c("character","character","character","character"))
+   rawSNP[,3] <- as.numeric(rawSNP[,3])
+  }
   colnames(rawSNP) <- c("rsid","chromosome","pos","genotype")
   rawSNP$allel1 <- substring(rawSNP$genotype,1,1)
   rawSNP$allel2 <- substring(rawSNP$genotype,2,2)
@@ -26,14 +35,15 @@ preProcessOpenSNP <- function(userInfo,db)
 }
 
 # locating database folder to store processed data
-setwd("D:/gitRepos/preProcessOpenSNP/db")
+setwd("C:/Users/jayabe/Google Drive/Datasets/openSNPdb")
 
 # Getting all user ids with genotype data with genotype links
 allusers <- users(df=TRUE)
 userWithSNP <- allusers[[1]]
 
 db=dbConnect(dbDriver("SQLite"),dbname = "openSNPgenotypeDB")
-preProcessOpenSNP(userInfo=userWithSNP[11:40,],db=db)
+preProcessOpenSNP(userInfo=userWithSNP[27,],db=db)
 dbGetQuery(db,"select count (*) from genotypeTBL")
+#hold=dbGetQuery(db,paste("select * from genotypeTBL where userID='",22,"'",sep=""))
 #as.vector(dbGetQuery(db,"select distinct userID from genotypeTBL")[,1])
 dbDisconnect(db)
