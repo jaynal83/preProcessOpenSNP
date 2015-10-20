@@ -42,9 +42,9 @@ allusers <- users(df=TRUE)
 userWithSNP <- allusers[[1]]
 
 db=dbConnect(dbDriver("SQLite"),dbname = "openSNPgenotypeDB")
-preProcessOpenSNP(userInfo=userWithSNP[226:250,],db=db)
+preProcessOpenSNP(userInfo=userWithSNP[402:450,],db=db)
 dbGetQuery(db,"select count (*) from genotypeTBL")
-# There is problem in user serial 60 and 129, 180 213 225
+# There is problem in user serial 60 and 129, 180 213 225 356 400 401
 #hold=dbGetQuery(db,paste("select * from genotypeTBL where userID='",22,"'",sep=""))
 #as.vector(dbGetQuery(db,"select distinct userID from genotypeTBL")[,1])
 dbDisconnect(db)
