@@ -35,17 +35,19 @@ preProcessOpenSNP <- function(userInfo,db)
 }
 
 # locating database folder to store processed data
-setwd("C:/Users/jayabe/Google Drive/Datasets/openSNPdb")
+setwd("D:/AllSync/Drive/Datasets/openSNPdb")
 
 # Getting all user ids with genotype data with genotype links
 allusers <- users(df=TRUE)
 userWithSNP <- allusers[[1]]
 
 db=dbConnect(dbDriver("SQLite"),dbname = "openSNPgenotypeDB")
-preProcessOpenSNP(userInfo=userWithSNP[402:450,],db=db)
+preProcessOpenSNP(userInfo=userWithSNP[1193:1200,],db=db)  # upto 1200 done
 dbGetQuery(db,"select count (*) from genotypeTBL")
-# There is problem in user serial 60 and 129, 180 213 225 356 400 401
-#hold=dbGetQuery(db,paste("select * from genotypeTBL where userID='",22,"'",sep=""))
+# There is problem in user serial 60 and 129, 180 213 225 356 400 401 454 459 493 500 509 525 549 558 700 755 778 834  925 1014 1021 1027  1028  1050 1057 1101  1129 1132
+# 1139 1146 1150 1183 1191 1192 
+#user22=dbGetQuery(db,paste("select * from genotypeTBL where userID='",22,"'",sep=""))
+# rs4477212=dbGetQuery(db,paste("select * from genotypeTBL where rsid='",'rs4477212',"'",sep=""))
 #as.vector(dbGetQuery(db,"select distinct userID from genotypeTBL")[,1])
 dbDisconnect(db)
 # http://www.jopm.org/evidence/research/2010/12/23/citizen-science-genomics-as-a-model-for-crowdsourced-preventive-medicine-research/
